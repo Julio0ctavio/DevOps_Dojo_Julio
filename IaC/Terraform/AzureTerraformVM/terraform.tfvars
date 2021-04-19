@@ -1,0 +1,8 @@
+resource_group_name         = "my_terraform_rg"
+resource_group_location     = "eastus"
+virtual_network_name        = "vnet021"
+subnet_name                 = "subnet021"
+public_ip_name              = "publicip021"
+network_security_group_name = "nsgprod021"
+network_interface_name      = "nicprod021"
+linux_virtual_machine_name  = "linuxvm021"

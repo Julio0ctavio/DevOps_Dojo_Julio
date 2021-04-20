@@ -168,13 +168,14 @@ resource "azurerm_linux_virtual_machine" "linuxvm" {
     version   = "latest"
   }
 
-  computer_name                   = "myvm"
+  computer_name                   = "myvm-${format("%02d", count.index)}"
+  custom_data = base64encode(file("azure-nginx.sh"))
   admin_username                  = "azureuser"
   disable_password_authentication = true
 
   admin_ssh_key {
     username   = "azureuser"
-    public_key = tls_private_key.example_ssh.public_key_openssh
+    public_key = file("~/.ssh/id_rsa.pub")
   }
 
   boot_diagnostics {

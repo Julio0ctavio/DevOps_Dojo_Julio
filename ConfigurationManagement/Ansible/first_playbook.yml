@@ -1,0 +1,11 @@
+# Creating a simple playbook that displays the asnible version for each vm:
+---
+
+- name: First_PLaybook See the ansible version for each vm
+  gather_facts: false
+  hosts: hosts
+  tasks:
+
+    - name: Display the version
+      debug:
+        msg: "{{ lookup('pipe', 'ansible --version') }}"

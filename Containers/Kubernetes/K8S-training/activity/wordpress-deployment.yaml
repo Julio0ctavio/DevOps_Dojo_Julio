@@ -1,0 +1,17 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  # name: XXXX
+  # namespace: XXXX
+spec:
+  # replicas: XXXX
+  template:
+    # metadata: XXXX
+    spec:
+      containers:
+      - image: bitnami/wordpress:latest
+        # name: XXXX
+        # env: XXXX
+        # ports: XXXX
+        # XXXX
+        # ...

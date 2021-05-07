@@ -1,0 +1,63 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: php-fpm
+  name: php-fpm
+  namespace: default
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: php-fpm
+    spec:
+      containers:
+      - name: php-fpm
+        image: bitnami/php-fpm:7.0
+        volumeMounts:
+        - name: config
+          mountPath: /app
+      - name: nginx
+        image: bitnami/nginx
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        volumeMounts:
+        - name: config
+          mountPath: /bitnami/nginx/conf/vhosts
+      volumes:
+      - name: config
+        configMap: 
+          name: my-php-fpm-config
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: my-php-fpm-config
+data:
+  yourapp.conf: |
+    server {
+      listen 0.0.0.0:8080;
+      server_name myapp.com;
+
+      root /app;
+
+      location / {
+        try_files $uri $uri/index.php;
+      }
+
+      location ~ \.php$ {
+        fastcgi_pass 127.0.0.1:9000;
+        fastcgi_index index.php;
+        include fastcgi.conf;
+      }
+    }
+  php-info.php: |
+    <?php
+    // Show all information, defaults to INFO_ALL
+    phpinfo();
+    ?>
+---

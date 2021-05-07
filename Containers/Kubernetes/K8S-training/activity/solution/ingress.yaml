@@ -1,0 +1,20 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: wordpress
+  namespace: activity
+  annotations:
+    nginx.ingress.kubernetes.io/affinity: cookie
+spec:
+  tls:
+  - hosts:
+    - wordpress.activity.com
+    secretName: ingress-tls
+  rules:
+  - host: wordpress.activity.com
+    http:
+      paths:
+      - path: "/"
+        backend:
+          serviceName: wordpress
+          servicePort: 80

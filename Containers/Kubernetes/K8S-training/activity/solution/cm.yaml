@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: wordpress-config
+  namespace: activity
+data:
+  blog-name: Kubernetes Training Blog
+  admin-first-name: Juan
+  admin-last-name: Ariza Toledano

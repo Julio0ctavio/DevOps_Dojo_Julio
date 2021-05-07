@@ -1,0 +1,63 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+spec:
+# TODO: Make functional
+  ports:
+  - port: 3306
+  selector:
+    app: mysql
+  clusterIP: None
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql
+spec:
+  selector:
+    matchLabels:
+      # TODO: Make functional
+      app: mysql
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      # TODO: Make functional
+      labels:
+        app: mysql
+    spec:
+      containers:
+      - image: mysql:5.6
+        name: mysql
+        env:
+        # TODO: Make functional and set a password
+        - name: MYSQL_ROOT_PASSWORD
+          value: password
+        ports:
+        # TODO: Make functional
+        - containerPort: 3306
+          name: mysql
+        volumeMounts:
+        # TODO: Make functional
+        - name: mysql
+          mountPath: /var/lib/mysql
+      volumes:
+      # TODO: Make functional
+      - name: mysql
+        persistentVolumeClaim:
+          claimName: mysql
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql
+spec:
+  storageClassName: standard
+  # TODO: Make functional and request at least 20 Gi
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi
+

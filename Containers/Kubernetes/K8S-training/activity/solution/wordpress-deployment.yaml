@@ -1,0 +1,94 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: wordpress
+  namespace: activity
+  labels:
+    app: wordpress
+    tier: frontend
+    track: stable
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: wordpress
+        tier: frontend
+        track: stable
+    spec:
+      containers:
+      - name: wordpress
+        image: bitnami/wordpress:4.9.4
+        env:
+        - name: MARIADB_HOST
+          value: "mariadb"
+        - name: MARIADB_PORT_NUMBER
+          value: "3306"
+        - name: WORDPRESS_DATABASE_NAME
+          valueFrom:
+            secretKeyRef:
+              name: mariadb-secret
+              key: database-name
+        - name: WORDPRESS_DATABASE_USER
+          valueFrom:
+            secretKeyRef:
+              name: mariadb-secret
+              key: database-user
+        - name: WORDPRESS_DATABASE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mariadb-secret
+              key: database-password
+        - name: WORDPRESS_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: wordpress-secret
+              key: user
+        - name: WORDPRESS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: wordpress-secret
+              key: password
+        - name: WORDPRESS_BLOG_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: wordpress-config
+              key: blog-name
+        - name: WORDPRESS_FIRST_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: wordpress-config
+              key: admin-first-name
+        - name: WORDPRESS_LAST_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: wordpress-config
+              key: admin-last-name
+        ports:
+        - name: http
+          containerPort: 80
+        - name: https
+          containerPort: 443
+        livenessProbe:
+          initialDelaySeconds: 120
+          httpGet:
+            path: /wp-login.php
+            port: http
+        readinessProbe:
+          initialDelaySeconds: 30
+          httpGet:
+            path: /wp-login.php
+            port: http
+        volumeMounts:
+        - mountPath: /bitnami/apache
+          name: wordpress-data
+          subPath: apache
+        - mountPath: /bitnami/wordpress
+          name: wordpress-data
+          subPath: wordpress
+        - mountPath: /bitnami/php
+          name: wordpress-data
+          subPath: php
+      volumes:
+      - name: wordpress-data
+        emptyDir: {}

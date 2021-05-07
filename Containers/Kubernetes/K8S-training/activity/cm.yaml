@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  # name: XXXX
+  # namespace: XXXX
+data:
+  # key: value
+  # ...

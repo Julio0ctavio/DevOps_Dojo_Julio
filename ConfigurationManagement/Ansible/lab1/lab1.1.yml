@@ -1,0 +1,12 @@
+---
+# Uninstall Nginx
+# In order to allow us to see the full cycle we would like to check how to uninstall Nginx. This is the playbook we are going to use.
+- hosts: all
+  become: yes
+  tasks:
+    - name: stop nginx
+      service:
+          name: nginx
+          state: stopped
+    - name: ensure nginx is not installed
+      apt: name=nginx state=absent

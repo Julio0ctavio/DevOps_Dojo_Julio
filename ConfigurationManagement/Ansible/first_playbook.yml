@@ -3,7 +3,7 @@
 
 - name: First_PLaybook See the ansible version for each vm
   gather_facts: false
-  hosts: hosts
+  hosts: aws_hosts
   tasks:
 
     - name: Display the version

@@ -1,0 +1,17 @@
+---
+- hosts: aws_backend
+  become: true
+  vars_files: ../default.yml
+  tasks:
+    - name: Stop the MySQL service if running
+      action: service name=mysql state=stopped
+
+    # - name: Uninstall MySQL
+    #   apt: 
+    #     pkg:
+    #       - mysql-server
+    #       - mysql-client
+    #       - python3-mysqldb
+    #       - libmysqlclient-dev
+    #     state: absent 
+    #     update_cache: yes

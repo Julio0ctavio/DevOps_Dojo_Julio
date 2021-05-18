@@ -1,0 +1,14 @@
+[aws_frontend]
+3.138.110.189
+3.16.29.170
+18.221.26.190
+
+[aws_frontend:vars]
+ansible_python_interpreter=/usr/bin/python3.6
+
+[aws_backend]
+3.19.255.45
+3.131.128.129
+
+[aws_backend:vars]
+ansible_python_interpreter=/usr/bin/python3.6

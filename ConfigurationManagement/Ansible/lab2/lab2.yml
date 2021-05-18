@@ -1,0 +1,75 @@
+---
+- hosts: aws_frontend
+  become: true
+  vars_files: ../default.yml
+  tasks:
+    - name: "Add repository for PHP 7.2"
+      apt_repository:
+        repo="ppa:ondrej/php"
+        update_cache=yes
+    - name: LEMP stack installation
+      apt:
+        pkg:
+          - software-properties-common
+          - nginx
+          - php7.2-fpm
+          - php7.2-bcmath
+          - php7.2-bz2
+          - php7.2-curl
+          - php7.2-dba
+          - php7.2-enchant
+          - php7.2-gmp
+          - php7.2-imap
+          - php7.2-mbstring
+          - php7.2-zip
+          - php7.2-tokenizer
+          - php-bcmath
+          - php-bz2
+          - php-enchant
+          - php-imap
+          - php7.2-zip
+          - php7.2-mysql
+          - php7.2-gd
+          - php7.2-pgsql
+          - php7.2-mongodb
+          - php7.2-xml
+          - php7.2-curl
+          - php7.2-ftp
+          - composer
+          - git
+          - zip
+          - htop
+          - iftop
+          - mysql-client
+        state: present
+
+    ##Download and configure wordpress
+    - name: Download and unpack latest WordPress
+      unarchive:
+        src: https://wordpress.org/latest.tar.gz
+        dest: "/var/www/"
+        remote_src: yes
+
+    - name: Copy the new wp-config.php file
+      copy:
+         src=/home/jlozano/Documentos/Ansible/lab2/templates/wp-config.php
+         dest=/var/www/wordpress/wp-config.php
+
+    - name: Copy the nginx vhost
+      copy:
+         src=/home/jlozano/Documentos/Ansible/lab2/templates/wordpress.conf
+         dest=/etc/nginx/sites-enabled/default
+
+    - name: Restart Nginx Service
+      command: nginx -s reload
+
+    - name: Set ownership and group to www-data user
+      file:
+        path: "/var/www/wordpress"
+        state: directory
+        recurse: yes
+        owner: www-data
+        group: www-data
+      
+    - name: Set the correct permissions on Wordpress directories
+      command: find /var/www/wordpress/ -type d -exec chmod 755 {} \;

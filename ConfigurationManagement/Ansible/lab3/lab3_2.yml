@@ -1,0 +1,26 @@
+- name: Set up multiple authorized keys
+  hosts: aws_frontend
+  become: true
+  tasks:
+      - name: Updating authorized_key
+      lineinfile:
+        path: /home/ubuntu/.ssh/authorized_keys
+        line: 
+          "{{ lookup('file', '/home/jlozano/Documentos/Ansible/lab3/public_keys.txt') }}"
+
+- name: Creating all sysadmin users
+  hosts: all
+  gather_facts: true
+  become: true
+  vars_files:
+    - ../default.yml
+  tasks:
+    - name: Creating the user
+      user: 
+        name: "{{ item.name }}"
+        state: present 
+        password: "{{ item.pwd | password_hash('sha512', 'A512') }}"
+        shell: /bin/bash
+        groups: "{{ admin_group }}"
+        append: true
+      with_items: "{{ users_sysadmin }}"

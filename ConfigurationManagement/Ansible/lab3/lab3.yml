@@ -1,0 +1,42 @@
+# The following playbook will create two kind of users:
+# * Developers * Sysadmins
+
+---
+- name: Creating all developers users
+  hosts: "127.0.0.1"
+  become: true
+  vars_files:
+    - ../default.yml
+  tasks:
+    - name: Creating the user
+      user: 
+        name: "{{ item.name }}"
+        state: present 
+        password: "{{ item.pwd | password_hash('sha512', 'A512') }}"
+        shell: /bin/bash
+        # Convert Unix Date to Timestamp
+        # You have to combine the -d option and the %s option for converting the unix date to timestamp. 
+        # date -d "2021-08-01 GMT" '+%s'
+        expires: 1627776000
+      with_items: "{{ users_frontend }}"
+    
+    - name: Create a 2048-bit SSH key for each frontend user ~user/.ssh/id_rsa
+      ansible.builtin.user:
+        name: "{{ item.name }}"
+        generate_ssh_key: yes
+        ssh_key_bits: 2048
+        ssh_key_file: .ssh/id_rsa
+      with_items: "{{ users_frontend }}"
+
+    - name: Create the public keys file
+      copy:
+        content: ""
+        dest: /home/jlozano/Documentos/Ansible/lab3/public_keys.txt
+    
+    - name: Copying the public keys
+      lineinfile:
+        path: /home/jlozano/Documentos/Ansible/lab3/public_keys.txt
+        line: 
+          "{{ lookup('file', '/home/{{ item.name }}/.ssh/id_rsa.pub') }}"
+      with_items: "{{ users_frontend }}"
+        

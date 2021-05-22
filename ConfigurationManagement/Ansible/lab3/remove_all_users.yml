@@ -1,0 +1,14 @@
+---
+- name: Clean all sysadmin users accounts
+  hosts: all
+  gather_facts: true
+  become: true
+  vars_files:
+    - ../default.yml
+  tasks:
+    - name: Deleting users
+      user:
+        name: "{{ item.name }}"
+        state: absent
+        remove: true
+      with_items: "{{ users_sysadmin }}"

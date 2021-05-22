@@ -52,13 +52,13 @@
 
     - name: Copy the new wp-config.php file
       copy:
-         src=/home/jlozano/Documentos/Ansible/lab2/templates/wp-config.php
-         dest=/var/www/wordpress/wp-config.php
+        src=/home/jlozano/Documentos/Ansible/lab2/templates/wp-config.php
+        dest=/var/www/wordpress/wp-config.php
 
     - name: Copy the nginx vhost
       copy:
-         src=/home/jlozano/Documentos/Ansible/lab2/templates/wordpress.conf
-         dest=/etc/nginx/sites-enabled/default
+        src=/home/jlozano/Documentos/Ansible/lab2/templates/wordpress.conf
+        dest=/etc/nginx/sites-enabled/default
 
     - name: Restart Nginx Service
       command: nginx -s reload

@@ -1,0 +1,12 @@
+- name: Clean all frontend users accounts
+  hosts: "127.0.0.1"
+  become: true
+  vars_files:
+    - ../default.yml
+  tasks:
+    - name: Deleting users
+      user:
+        name: "{{ item.name }}"
+        state: absent
+        remove: true
+      with_items: "{{ users_frontend }}"

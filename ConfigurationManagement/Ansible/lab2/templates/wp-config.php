@@ -29,7 +29,7 @@ define( 'DB_USER', 'master_wp' );
 define( 'DB_PASSWORD', 'password' );
 
 /** MySQL hostname This parameter must be different once you turn off the instance on AWS*/ 
-define( 'DB_HOST', '3.21.162.8' );
+define( 'DB_HOST', '3.133.85.204' );
 
 /** Database Charset to use in creating database tables. */
 define( 'DB_CHARSET', 'utf8' );

@@ -7,11 +7,11 @@
       action: service name=mysql state=stopped
 
     # - name: Uninstall MySQL
-    #   apt:
+    #   apt: 
     #     pkg:
     #       - mysql-server
     #       - mysql-client
     #       - python3-mysqldb
     #       - libmysqlclient-dev
-    #     state: absent
+    #     state: absent 
     #     update_cache: yes

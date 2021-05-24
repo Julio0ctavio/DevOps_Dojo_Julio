@@ -2,10 +2,11 @@
   hosts: aws_frontend
   become: true
   tasks:
-      - name: Updating authorized_key
+    - name: Updating authorized_key
       lineinfile:
         path: /home/ubuntu/.ssh/authorized_keys
-        line: 
+        line:
+        # You must need to put a file where sudo is not the proper 
           "{{ lookup('file', '/home/jlozano/Documentos/Ansible/lab3/public_keys.txt') }}"
 
 - name: Creating all sysadmin users

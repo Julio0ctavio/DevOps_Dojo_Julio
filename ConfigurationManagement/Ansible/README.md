@@ -41,26 +41,26 @@
     How to configure PHP properly:
 
     $ cd /etc/php/7.2/fpm/pool.d
-    $ sudo nano www.conf 
+    $ sudo nano www.conf
 
     Write the following line:
     listen = 127.0.0.1:9001
 
-    $ systemctl restart php7.2-fpm 
+    $ systemctl restart php7.2-fpm
 
     How To Allow Remote Access to MySQL:
 
     To enable this, open up your mysqld.cnf file:
     $ sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf
 
-    By default, this value is set to 127.0.0.1, 
-    meaning that the server will only look for local connections. 
-    For the purposes of troubleshooting, 
+    By default, this value is set to 127.0.0.1,
+    meaning that the server will only look for local connections.
+    For the purposes of troubleshooting,
     you could set this directive to a wildcard IP address, either *, ::, or 0.0.0.0:
 
     lc-messages-dir = /usr/share/mysql
     skip-external-locking
-    
+
     Instead of skip-networking the default is now to listen only on
     localhost which is more compatible and is not less secure.
     bind-address            = 0.0.0.0
@@ -72,12 +72,12 @@
 
     Once inside, you must let the user(for WordPress DB) be able to connect remotely from the frontend server:
     mysql> SELECT host, user from mysql.user;
-    
+
     To change a user’s host, you can use MySQL’s RENAME USER command. Run the following command, making sure to change sammy to the name of your MySQL user account and remote_server_ip to your remote server’s IP address:
     mysql> RENAME USER 'sammy'@'localhost' TO 'sammy'@'frontend_server_ip';
 
     Then grant the new user the appropriate privileges for your particular needs.
-    mysql> GRANT ALL PRIVILEGES ON wordpress.* TO 'sammy'@'frontend_server_ip';
+    mysql> GRANT ALL PRIVILEGES ON wordpress.* TO 'master_wp'@'3.142.74.217';
 
     Flush the privileges to save any change:
     mysql> FLUSH PRIVILEGES;
@@ -89,5 +89,16 @@
     If you have set up properly all parameters, you could see a successfully wordpress login page.
 
 
+# Security practices with Ansible Vault:
 
+    For encrypting files:
+    $ ansible-vault encrypt ------.yml
 
+    For decrypting files:
+    $ ansible-vault decrypt ------.yml
+
+    For view the content of a encrypted file:
+    $ ansible-vault view ---------.yml
+
+    For executing a playbook that uses a encrypted yaml (file like variables):
+    $ ansible-playbook --vault-id @prompt -i <hosts_file> <playbook_path>

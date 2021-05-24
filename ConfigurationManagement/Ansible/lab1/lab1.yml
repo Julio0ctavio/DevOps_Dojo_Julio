@@ -1,6 +1,6 @@
 ---
 # Install Nginx on Ubuntu
-- hosts: all
+- hosts: "18.188.122.210"
   become: yes
   tasks:
     - name: ensure nginx is at the latest version
